@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Creator Control Room</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#overview" aria-label="Creator Control Room home">
+        <span class="brand-mark">▶</span>
+        <span><strong id="brand-name">Control Room</strong><small>Autopilot for your channel</small></span>
+      </a>
+      <nav aria-label="Main navigation">
+        <button class="nav-item active" data-view="overview"><span>⌂</span> Home</button>
+        <button class="nav-item" data-view="pipeline"><span>≋</span> Queue <b id="review-badge" class="badge hidden">0</b></button>
+        <button class="nav-item" data-view="analytics"><span>⌁</span> Insights</button>
+        <button class="nav-item" data-view="calendar"><span>□</span> Planner</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span> Settings</button>
+      </nav>
+      <div class="sidebar-footer">
+        <button id="automation-toggle" class="button secondary full">Pause autopilot</button>
+        <div class="system-pill"><i id="system-dot"></i><span id="system-label">Connecting…</span></div>
+      </div>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="view-eyebrow">CONTROL ROOM</p>
+          <h1 id="view-title">Everything, at a glance.</h1>
+        </div>
+        <div class="top-actions">
+          <button id="generate-button" class="button primary">＋ New video</button>
+          <button id="refresh-button" class="icon-button" title="Refresh dashboard" aria-label="Refresh dashboard">↻</button>
+        </div>
+      </header>
+
+      <div id="loading" class="loading-bar"></div>
+      <div id="toast" class="toast hidden" role="status"></div>
+
+      <section id="overview-view" class="view active">
+        <div id="setup-banner" class="setup-banner hidden"><div><strong>Finish setup to activate your agents</strong><p>The operator console is ready, but generation and publishing stay disabled until credentials are configured.</p></div><code>npm run walkthrough</code></div>
+        <div class="stats-grid">
+          <article class="stat"><span>Scheduled</span><strong id="stat-scheduled">—</strong><small>next 30 days</small></article>
+          <article class="stat"><span>Awaiting review</span><strong id="stat-review">—</strong><small>waiting for a decision</small></article>
+          <article class="stat"><span>Avg. quality score</span><strong id="stat-score">—</strong><small>recent content performance</small></article>
+          <article class="stat"><span>Published</span><strong id="stat-published">—</strong><small>all time</small></article>
+        </div>
+
+        <div class="overview-grid">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">IN PROGRESS</p><h2>Running now</h2></div></div>
+            <div id="job-list" class="card-list compact"></div>
+          </article>
+          <article class="panel review-panel">
+            <div class="panel-heading"><div><p class="eyebrow">NEEDS YOU</p><h2>Waiting on your call</h2></div><button class="text-button" data-go="pipeline">See queue →</button></div>
+            <div id="review-list" class="card-list"></div>
+          </article>
+        </div>
+
+        <div class="overview-grid lower">
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">ACTIVITY</p><h2>Latest events</h2></div></div>
+            <div id="notification-list" class="activity-list"></div>
+          </article>
+          <article class="panel">
+            <div class="panel-heading"><div><p class="eyebrow">COMING UP</p><h2>What's next to publish</h2></div><button class="text-button" data-go="calendar">Open planner →</button></div>
+            <div id="next-schedule" class="timeline"></div>
+          </article>
+        </div>
+      </section>
+
+      <section id="pipeline-view" class="view">
+        <div class="section-intro"><div><h2>Production queue</h2><p>Every video you've generated, where it stands, and what to do next.</p></div><select id="pipeline-filter"><option value="all">All content</option><option value="needs_review">Needs review</option><option value="needs_attention">Needs attention</option><option value="approved">Approved</option><option value="published">Published</option></select></div>
+        <div id="pipeline-list" class="pipeline-list"></div>
+      </section>
+
+      <section id="calendar-view" class="view">
+        <div class="split-heading"><div><h2>Content planner</h2><p>Sketch out ideas before you spend generation credits.</p></div><button id="add-idea-button" class="button secondary">＋ New idea</button></div>
+        <div class="calendar-grid">
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">IDEAS</p><h2>Not yet made</h2></div></div><div id="idea-list" class="idea-list"></div></article>
+          <article class="panel"><div class="panel-heading"><div><p class="eyebrow">ON DECK</p><h2>Upcoming releases</h2></div></div><div id="calendar-list" class="calendar-list"></div></article>
+        </div>
+      </section>
+
+      <section id="analytics-view" class="view">
+        <div class="section-intro"><div><h2>Channel insights</h2><p>Signal over vanity metrics.</p></div></div>
+        <div class="stats-grid analytics-stats">
+          <article class="stat"><span>Analyzed videos</span><strong id="analytics-total">—</strong><small>last 30 days</small></article>
+          <article class="stat"><span>Performance score</span><strong id="analytics-score">—</strong><small>channel average</small></article>
+          <article class="stat wide"><span>What to do next</span><strong id="analytics-action" class="recommendation">Collecting enough data to recommend a move.</strong></article>
+        </div>
+        <article class="panel"><div class="panel-heading"><div><p class="eyebrow">BEST VIDEOS</p><h2>What's working</h2></div></div><div id="top-performers" class="card-list"></div></article>
+        <article class="panel activation-panel"><div class="panel-heading"><div><p class="eyebrow">MILESTONES</p><h2>Your journey so far</h2></div></div><p class="callout">Calculated locally from your database and video files. Nothing is transmitted unless anonymous telemetry is explicitly enabled.</p><div id="activation-list" class="timeline"></div></article>
+      </section>
+
+      <section id="settings-view" class="view">
+        <div class="section-intro"><div><h2>Channel settings</h2><p>This shapes how every agent behaves.</p></div></div>
+        <form id="profile-form" class="panel settings-form">
+          <div class="form-grid">
+            <label><span>Channel name</span><input name="channelName" maxlength="120" required></label>
+            <label><span>Default format</span><select name="defaultStyle"><option value="explainer">Explainer</option><option value="tutorial">Tutorial</option><option value="list">List</option><option value="review">Review</option><option value="story">Story</option></select></label>
+            <label class="full-row"><span>Channel goal</span><textarea name="goal" rows="2"></textarea></label>
+            <label class="full-row"><span>Target audience</span><textarea name="targetAudience" rows="2"></textarea></label>
+            <label><span>Brand voice</span><input name="brandVoice" placeholder="Clear, credible, engaging"></label>
+            <label><span>Timezone</span><input name="timezone" placeholder="America/Chicago"></label>
+            <label class="full-row"><span>Default call to action</span><input name="callToAction"></label>
+            <label class="full-row"><span>Visual style</span><input name="visualStyle"></label>
+            <label class="full-row"><span>Banned topics</span><input name="bannedTopics" placeholder="term one, term two"><small>Quality review blocks content containing these terms.</small></label>
+          </div>
+          <div class="settings-row">
+            <label class="toggle"><input id="approval-required" type="checkbox"><span></span> Require approval before scheduling</label>
+            <label class="toggle"><input id="notifications-enabled" type="checkbox"><span></span> Save operator notifications</label>
+          </div>
+          <div class="form-actions"><button type="submit" class="button primary">Save settings</button><button id="api-key-button" type="button" class="button secondary">Set API key</button></div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <dialog id="generate-dialog" class="dialog">
+    <form id="generate-form" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">NEW VIDEO</p><h2>Start a new video</h2></div><button type="button" class="close-button" data-close>×</button></div>
+      <label><span>Topic <small>optional — leave blank and the agent will pick</small></span><input name="topic" maxlength="200" placeholder="How small teams can automate repetitive work"></label>
+      <div class="form-grid two">
+        <label><span>Format</span><select name="style"><option value="explainer">Explainer</option><option value="tutorial">Tutorial</option><option value="list">List</option><option value="review">Review</option><option value="story">Story</option></select></label>
+        <label><span>Length</span><select name="length"><option value="short">Short · 2–4 min</option><option value="medium" selected>Medium · 8–12 min</option><option value="long">Long · 15–20 min</option></select></label>
+      </div>
+      <p class="callout">This runs in the background — track progress and cancel anytime before it finishes.</p>
+      <div class="form-actions"><button type="submit" class="button primary">Start</button><button type="button" class="button ghost" data-close>Cancel</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="content-dialog" class="dialog content-dialog">
+    <div id="content-detail"></div>
+  </dialog>
+
+  <dialog id="idea-dialog" class="dialog">
+    <form id="idea-form" method="dialog">
+      <div class="dialog-heading"><div><p class="eyebrow">IDEAS</p><h2>New idea</h2></div><button type="button" class="close-button" data-close>×</button></div>
+      <label><span>Topic</span><input name="topic" maxlength="200" required></label>
+      <label><span>Angle</span><textarea name="angle" rows="3" placeholder="What makes this take distinctive?"></textarea></label>
+      <label><span>Why it is worth making</span><textarea name="rationale" rows="2"></textarea></label>
+      <label><span>Format</span><select name="style"><option value="explainer">Explainer</option><option value="tutorial">Tutorial</option><option value="list">List</option><option value="review">Review</option><option value="story">Story</option></select></label>
+      <div class="form-actions"><button type="submit" class="button primary">Add idea</button><button type="button" class="button ghost" data-close>Cancel</button></div>
+    </form>
+  </dialog>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
