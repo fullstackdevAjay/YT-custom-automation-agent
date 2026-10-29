@@ -2,7 +2,7 @@ const express = require('express');
 const { google } = require('googleapis');
 const fs = require('fs');
 const path = require('path');
-const chalk = require('chalk');
+const chalk = require('chalk').default;
 
 class OAuthServer {
   constructor() {

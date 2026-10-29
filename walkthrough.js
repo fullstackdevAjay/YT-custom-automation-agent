@@ -1,7 +1,7 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
-const inquirer = require('inquirer');
-const chalk = require('chalk');
+const inquirer = require('inquirer').default;
+const chalk = require('chalk').default;
 const fs = require('fs').promises;
 const path = require('path');
 const { exec } = require('child_process');
@@ -220,7 +220,7 @@ class SetupWalkthrough {
     }
 
     const { providerId } = await inquirer.prompt([{
-      type: 'list',
+      type: 'select',
       name: 'providerId',
       message: 'Which AI provider do you want to use?',
       choices: Object.entries(AI_PROVIDER_GUIDE).map(([value, guide]) => ({ name: guide.label, value }))
@@ -248,7 +248,7 @@ class SetupWalkthrough {
       }
 
       const { model } = await inquirer.prompt([{
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Model to use:',
         choices: guide.models,
@@ -324,7 +324,7 @@ class SetupWalkthrough {
     }
 
     const { action } = await inquirer.prompt([{
-      type: 'list',
+      type: 'select',
       name: 'action',
       message: 'How do you want to proceed?',
       choices: [
@@ -409,7 +409,7 @@ class SetupWalkthrough {
         default: existing.channelName || 'My Automated Channel'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'postingFrequency',
         message: 'How often should it post?',
         choices: [

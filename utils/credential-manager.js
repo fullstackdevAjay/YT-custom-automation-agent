@@ -1,8 +1,8 @@
 const fs = require('fs').promises;
 const path = require('path');
 const { google } = require('googleapis');
-const inquirer = require('inquirer');
-const chalk = require('chalk');
+const inquirer = require('inquirer').default;
+const chalk = require('chalk').default;
 const { Logger } = require('./logger');
 const { PROVIDERS, GEMINI_MODELS, GEMINI_DEFAULT_MODEL } = require('./ai-text-service');
 
@@ -168,7 +168,7 @@ class CredentialManager {
         validate: input => input.startsWith('sk-') || 'Invalid OpenAI API key format'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select your preferred model:',
         choices: [...PROVIDERS.openai.models],
@@ -198,7 +198,7 @@ class CredentialManager {
         validate: input => input.length > 0 || 'API key is required'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select your preferred Gemini model:',
         choices: [...GEMINI_MODELS],
@@ -229,7 +229,7 @@ class CredentialManager {
         validate: input => input.startsWith('sk-or-') || 'Invalid OpenRouter key format (starts with sk-or-)'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select default model:',
         choices: [...PROVIDERS.openrouter.models],
@@ -260,7 +260,7 @@ class CredentialManager {
         validate: input => input.length > 0 || 'API key is required'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select model:',
         choices: [...PROVIDERS.kimi.models],
@@ -291,7 +291,7 @@ class CredentialManager {
         validate: input => input.length > 0 || 'API key is required'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select model:',
         choices: [...PROVIDERS.mimo.models],
@@ -322,7 +322,7 @@ class CredentialManager {
         validate: input => input.length > 0 || 'API key is required'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'model',
         message: 'Select model:',
         choices: [...PROVIDERS.glm.models],
@@ -359,7 +359,7 @@ class CredentialManager {
         default: 'eastus'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'voice',
         message: 'Select preferred voice:',
         choices: [
@@ -407,7 +407,7 @@ class CredentialManager {
         default: '22'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'defaultPrivacy',
         message: 'Select default privacy setting:',
         choices: ['public', 'unlisted', 'private'],
@@ -468,7 +468,7 @@ class CredentialManager {
         default: 'General audience interested in educational content'
       },
       {
-        type: 'list',
+        type: 'select',
         name: 'postingFrequency',
         message: 'Select posting frequency:',
         choices: [
@@ -624,7 +624,7 @@ class CredentialManager {
   async setupAIService() {
     const { service } = await inquirer.prompt([
       {
-        type: 'list',
+        type: 'select',
         name: 'service',
         message: 'Select your preferred AI service:',
         choices: [
@@ -651,7 +651,7 @@ class CredentialManager {
   async setupTTSService() {
     const { service } = await inquirer.prompt([
       {
-        type: 'list',
+        type: 'select',
         name: 'service',
         message: 'Select your preferred Text-to-Speech service:',
         choices: [

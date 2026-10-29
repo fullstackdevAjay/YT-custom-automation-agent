@@ -28,56 +28,56 @@ class DailyAutomation {
   async setupScheduledTasks() {
     // Daily content generation at 6:00 AM
     this.scheduledTasks.set('daily-content-generation', 
-      cron.schedule('0 6 * * *', async () => {
+      cron.createTask('0 6 * * *', async () => {
         if (this.isEnabled) {
           await this.runDailyContentGeneration();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Publishing queue processing every 15 minutes
     this.scheduledTasks.set('publish-queue-processing',
-      cron.schedule('*/15 * * * *', async () => {
+      cron.createTask('*/15 * * * *', async () => {
         if (this.isEnabled) {
           await this.processPublishQueue();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Analytics collection at 9:00 AM daily
     this.scheduledTasks.set('daily-analytics',
-      cron.schedule('0 9 * * *', async () => {
+      cron.createTask('0 9 * * *', async () => {
         if (this.isEnabled) {
           await this.collectDailyAnalytics();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Weekly strategy review on Sundays at 8:00 AM
     this.scheduledTasks.set('weekly-strategy-review',
-      cron.schedule('0 8 * * 0', async () => {
+      cron.createTask('0 8 * * 0', async () => {
         if (this.isEnabled) {
           await this.weeklyStrategyReview();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Optimization tasks daily at 10:00 PM
     this.scheduledTasks.set('daily-optimization',
-      cron.schedule('0 22 * * *', async () => {
+      cron.createTask('0 22 * * *', async () => {
         if (this.isEnabled) {
           await this.runDailyOptimization();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Database maintenance weekly on Saturdays at 3:00 AM
     this.scheduledTasks.set('database-maintenance',
-      cron.schedule('0 3 * * 6', async () => {
+      cron.createTask('0 3 * * 6', async () => {
         if (this.isEnabled) {
           await this.databaseMaintenance();
         }
-      }, { scheduled: false })
+      })
     );
 
     // Start all scheduled tasks
@@ -527,7 +527,7 @@ class DailyAutomation {
 
     // Check scheduled tasks
     this.scheduledTasks.forEach((task, name) => {
-      health.scheduledTasks[name] = task.running;
+      health.scheduledTasks[name] = task.getStatus() !== 'stopped';
     });
 
     // Get system resources (simplified)
@@ -597,7 +597,7 @@ class DailyAutomation {
       enabled: this.isEnabled,
       scheduledTasks: Array.from(this.scheduledTasks.keys()).map(name => ({
         name,
-        running: this.scheduledTasks.get(name).running
+        running: this.scheduledTasks.get(name).getStatus() !== 'stopped'
       })),
       lastHealthCheck: this.lastHealthCheck,
       uptime: process.uptime()

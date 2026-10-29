@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const express = require('express');
 const path = require('path');
@@ -19,7 +19,7 @@ const { OperatorService } = require('./utils/operator-service');
 const { ActivationMetrics } = require('./utils/activation-metrics');
 const { AnonymousTelemetry } = require('./utils/anonymous-telemetry');
 const { version } = require('./package.json');
-const chalk = require('chalk');
+const chalk = require('chalk').default;
 
 class YouTubeAutomationAgent {
   constructor() {

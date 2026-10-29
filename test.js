@@ -1,7 +1,7 @@
 const { Database } = require('./database/db');
 const { Logger } = require('./utils/logger');
 const { CredentialManager } = require('./utils/credential-manager');
-const chalk = require('chalk');
+const chalk = require('chalk').default;
 const path = require('path');
 
 class SystemTest {
@@ -856,7 +856,7 @@ class SystemTest {
       try {
         require(agentFile);
       } catch (error) {
-        throw new Error(`Failed to load ${agentFile}: ${error.message}`);
+        throw new Error(`Failed to load ${agentFile}: ${error.message}`, { cause: error });
       }
     }
 

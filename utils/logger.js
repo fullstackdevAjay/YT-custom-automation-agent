@@ -1,6 +1,6 @@
 const winston = require('winston');
 const path = require('path');
-const chalk = require('chalk');
+const chalk = require('chalk').default;
 
 class Logger {
   constructor(component = 'System') {

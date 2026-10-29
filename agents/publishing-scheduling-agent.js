@@ -168,7 +168,7 @@ class PublishingSchedulingAgent {
 
       return fsSync.createReadStream(videoPath);
     } catch (error) {
-      throw new Error('video file not found — refusing to upload placeholder');
+      throw new Error('video file not found — refusing to upload placeholder', { cause: error });
     }
   }
   async uploadThumbnail(videoId, thumbnailPath) {

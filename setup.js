@@ -1,10 +1,10 @@
-require('dotenv').config();
+require('dotenv').config({ quiet: true });
 
 const { CredentialManager } = require('./utils/credential-manager');
 const { Database } = require('./database/db');
 const { Logger } = require('./utils/logger');
-const chalk = require('chalk');
-const inquirer = require('inquirer');
+const chalk = require('chalk').default;
+const inquirer = require('inquirer').default;
 const fs = require('fs').promises;
 const path = require('path');
 
@@ -22,7 +22,7 @@ class YouTubeAutomationSetup {
     console.log(chalk.gray('This will configure your system for fully automated YouTube content creation.\n'));
 
     const { mode } = await inquirer.prompt([{
-      type: 'list',
+      type: 'select',
       name: 'mode',
       message: 'How would you like to set up?',
       choices: [
